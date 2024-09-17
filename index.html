@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Server-sent Events</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Hello, world</h1>
-</body>
+    <div class="" id="data"></div>
+    <script>
+      const eventSource = new EventSource("http://localhost:8080/stream");
+      console.log("Start stream!");
+      const dataElem = document.getElementById("data");
+      eventSource.onmessage = (message) => {
+        dataElem.innerText = `id: ${message.lastEventId} data: ${message.data}`;
+      };
+
+      eventSource.addEventListener("end-of-stream", () => {
+        console.log("End of stream!");
+        eventSource.close();
+      });
+    </script>
+  </body>
 </html>
